@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reward Game App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928DAB);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .app-container {
+      width: 95%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 25px;
+      padding: 20px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      color: white;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .balance {
+      background: rgba(255,255,255,0.2);
+      padding: 10px 20px;
+      border-radius: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .game-btn {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      border: none;
+      color: white;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .game-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h1>🎮 Reward Game 🎁</h1>
+    <div class="balance">💰 Coins: <span id="coinBalance">0</span></div>
+    <p>Click a button to earn rewards!</p>
+
+    <div class="button-grid">
+      <button class="game-btn" onclick="playAd('Spin to Win', 10)">🎡 Spin</button>
+      <button class="game-btn" onclick="playAd('Watch Video', 20)">🎥 Watch</button>
+      <button class="game-btn" onclick="playAd('Claim Reward', 50)">💎 Claim</button>
+      <button class="game-btn" onclick="playAd('Lucky Draw', 100)">🎲 Lucky</button>
+    </div>
+  </div>
+
+  <!-- AuruAds Script -->
+  <script src="https://auruads.com/cdn/ads.js?app_uid=3084"></script>
+
+  <script>
+    let coins = 0;
+
+    // Load saved coins
+    window.onload = function() {
+      let savedCoins = localStorage.getItem("coins");
+      if (savedCoins) {
+        coins = parseInt(savedCoins);
+        document.getElementById("coinBalance").innerText = coins;
+      }
+    };
+
+    function playAd(title, reward) {
+      // Call AuruAds
+      window.showAuruads()
+        .then(() => {
+          // ✅ Grant reward after ad success
+          coins += reward;
+          document.getElementById("coinBalance").innerText = coins;
+          localStorage.setItem("coins", coins);
+
+          alert("✅ " + title + " completed! You earned +" + reward + " coins.");
+        })
+        .catch(e => {
+          // ❌ Handle errors
+          console.error("Ad failed:", e);
+          alert("⚠️ Ad failed to load. Please try again.");
+        });
+    }
+  </script>
+</body>
+</html>
